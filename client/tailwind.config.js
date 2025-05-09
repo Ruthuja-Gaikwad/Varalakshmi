@@ -6,6 +6,9 @@ module.exports = {
     extend: {
       scrollBehavior: ['responsive'],
     },
+    fontFamily: {
+      sans: ['Roboto', 'Arial', 'sans-serif'],
+    },
   },
   plugins: [],
 };

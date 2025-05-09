@@ -1,34 +1,41 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Importing Components
+// Public Components
 import Homepage from './components/HomePage';
-import ProductsPage from './components/ProductPage';
 import CustomOrderPage from './components/CustomOrderPage';
-import AboutPage from './components/AboutPage';
+import ProductPage from './components/ProductPage';
+import AboutUs from './components/AboutUs';
+import ContactPage from './components/ContactPage'; // ✅ NEW
 
 // Admin Components
-import AdminLogin from './components/AdminLogin';
-import AdminDashboard from './components/AdminDashboard';
-import AdminPanel from './components/AdminPanel';
+import Login from './components/admin/Login';
+import Dashboard from './components/admin/Dashboard';
+import AddProduct from './components/admin/AddProduct';
+import Orders from './components/admin/Orders';
+
+// Product Context
+import { ProductProvider } from './components/ProductContext';
 
 function App() {
   return (
     <Router>
-      <Routes>
+      <ProductProvider>
+        <Routes>
+          {/* Public Pages */}
+          <Route path="/" element={<Homepage />} />
+          <Route path="/custom" element={<CustomOrderPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/contact" element={<ContactPage />} /> {/* ✅ NEW ROUTE */}
 
-        {/* Public Pages */}
-        <Route path="/" element={<Homepage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/custom" element={<CustomOrderPage />} />
-        <Route path="/about" element={<AboutPage />} />
-
-        {/* Admin Pages */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/panel" element={<AdminPanel />} />
-
-      </Routes>
+          {/* Admin Pages */}
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/add-product" element={<AddProduct />} />
+          <Route path="/admin/orders" element={<Orders />} />
+        </Routes>
+      </ProductProvider>
     </Router>
   );
 }

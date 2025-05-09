@@ -1,0 +1,17 @@
+{
+    "name": "varalakshmi-workshop",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "cd server && nodemon server.js",
+        "client": "cd client && npm start"
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.2",
+        "nodemon": "^2.0.22"
+    },
+    "dependencies": {
+        "@heroicons/react": "^1.0.6"
+    }
+}

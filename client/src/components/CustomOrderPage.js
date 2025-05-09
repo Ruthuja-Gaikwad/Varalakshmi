@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaUser, FaPhoneAlt, FaImage, FaPen } from 'react-icons/fa';
 
 export default function CustomOrderPage() {
   const [formData, setFormData] = useState({
@@ -17,53 +18,98 @@ export default function CustomOrderPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Your custom design request has been submitted!');
-    // TODO: Add backend form handling here
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('contact', formData.contact);
+    data.append('type', formData.type);
+    data.append('description', formData.description);
+    data.append('file', formData.file);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit order');
+      }
+
+      const result = await response.json();
+      alert('Your custom design request has been submitted!');
+      console.log('Order saved:', result);
+
+      // Clear form
+      setFormData({
+        name: '',
+        contact: '',
+        type: '',
+        description: '',
+        file: null,
+      });
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('There was a problem submitting your request.');
+    }
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10 font-sans">
-      <h1 className="text-3xl font-bold text-yellow-700 mb-6 text-center">
+    <div
+      className="max-w-full lg:max-w-lg xl:max-w-xl mx-auto px-3 py-4 font-sans bg-cover bg-center bg-no-repeat rounded-xl shadow-lg"
+      style={{
+        backgroundImage:
+          "url('https://www.toptal.com/designers/subtlepatterns/patterns/sand.png')",
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-600 opacity-70"></div>
+
+      <h1 className="text-2xl font-bold text-yellow-700 mb-3 text-center relative z-10">
         Craft Your Custom Design
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl shadow space-y-5"
+        className="relative z-10 bg-white p-5 rounded-xl shadow-lg space-y-4"
         encType="multipart/form-data"
       >
-        <div>
-          <label className="block mb-1 font-medium">Name</label>
+        <div className="space-y-1">
+          <label className="block text-md font-semibold text-gray-700 flex items-center">
+            <FaUser className="mr-2 text-yellow-600" />
+            Name
+          </label>
           <input
             type="text"
             name="name"
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={formData.name}
             onChange={handleChange}
             required
           />
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Phone or Email</label>
+        <div className="space-y-1">
+          <label className="block text-md font-semibold text-gray-700 flex items-center">
+            <FaPhoneAlt className="mr-2 text-yellow-600" />
+            Phone or Email
+          </label>
           <input
             type="text"
             name="contact"
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={formData.contact}
             onChange={handleChange}
             required
           />
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Product Type</label>
+        <div className="space-y-1">
+          <label className="block text-md font-semibold text-gray-700">Product Type</label>
           <select
             name="type"
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={formData.type}
             onChange={handleChange}
             required
@@ -76,12 +122,15 @@ export default function CustomOrderPage() {
           </select>
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Design Description</label>
+        <div className="space-y-1">
+          <label className="block text-md font-semibold text-gray-700 flex items-center">
+            <FaPen className="mr-2 text-yellow-600" />
+            Design Description
+          </label>
           <textarea
             name="description"
-            rows="4"
-            className="w-full border px-4 py-2 rounded"
+            rows="3"
+            className="w-full border border-gray-300 p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={formData.description}
             onChange={handleChange}
             placeholder="Describe your custom design idea..."
@@ -89,24 +138,29 @@ export default function CustomOrderPage() {
           ></textarea>
         </div>
 
-        <div>
-          <label className="block mb-1 font-medium">Upload Design Sketch / Image</label>
+        <div className="space-y-1">
+          <label className="block text-md font-semibold text-gray-700 flex items-center">
+            <FaImage className="mr-2 text-yellow-600" />
+            Upload Design Sketch / Image
+          </label>
           <input
             type="file"
             name="file"
             accept="image/*"
-            className="w-full"
+            className="w-full p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
             onChange={handleChange}
             required
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 rounded"
-        >
-          Submit
-        </button>
+        <div>
+          <button
+            type="submit"
+            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 rounded-xl shadow-lg transition duration-300"
+          >
+            Submit Request
+          </button>
+        </div>
       </form>
     </div>
   );

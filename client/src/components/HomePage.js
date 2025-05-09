@@ -24,9 +24,9 @@ export default function HomePage() {
           <a href="#home">Home</a>
           <a href="#productpage">Product</a>
           <Link to="/custom">Custom Order</Link> {/* Updated to Link */}
-          <a href="#about">About Us</a>
-          <a href="#contact">Contact</a>
-          <Link to="/admin/login" className="text-yellow-700 hover:underline">Admin Login</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact" className="text-gray-700 hover:text-[#B8860B] transition duration-300">Contact</Link>
+          <Link to="/admin/Login" className="text-yellow-700 hover:underline">Admin Login</Link>
         </div>
       </nav>
 
