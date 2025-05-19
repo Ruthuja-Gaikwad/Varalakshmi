@@ -8,7 +8,7 @@ const Sidebar = () => {
         <li><Link to="/admin/dashboard" className="hover:text-yellow-400">Dashboard</Link></li>
         <li><Link to="/admin/add-product" className="hover:text-yellow-400">Add Product</Link></li>
         <li><Link to="/admin/orders" className="hover:text-yellow-400">Orders</Link></li>
-        <li><Link to="/admin/login" className="hover:text-red-400">Logout</Link></li>
+        <li><Link to="/admin/enquiries" className="hover:text-yellow-400">Enquiries</Link></li> {/* New Link for Enquiries Page */}
       </ul>
     </div>
   );
