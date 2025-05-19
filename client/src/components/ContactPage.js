@@ -92,7 +92,7 @@ const ContactPage = () => {
               <h2 className="text-2xl font-semibold mb-4 text-[#B8860B]">Our Info</h2>
               <div className="flex items-center space-x-3 mb-3">
                 <PhoneIcon className="h-5 w-5 text-[#B8860B]" />
-                <span className="text-gray-700">+91 98765 43210</span>
+                <span className="text-gray-700">+91 9553504775</span>
               </div>
               <div className="flex items-center space-x-3 mb-3">
                 <MailIcon className="h-5 w-5 text-[#B8860B]" />
@@ -100,10 +100,10 @@ const ContactPage = () => {
               </div>
               <div className="flex items-center space-x-3 mb-3">
                 <LocationMarkerIcon className="h-5 w-5 text-[#B8860B]" />
-                <span className="text-gray-700">123 Artisan Lane, Hyderabad, Telangana</span>
+                <span className="text-gray-700">Ram Lingeswara Temple, Warangal Chowrastha, Telangana</span>
               </div>
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/919553504775"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"

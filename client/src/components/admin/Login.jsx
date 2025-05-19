@@ -35,19 +35,20 @@ const Login = () => {
 
       const data = await response.json();
       console.log('Login response:', data);
-      console.log('data.token:', data.token); // Add this
+      console.log('data.token:', data.token);
 
       if (response.ok && data.token) {
-        // ✅ Store token first
-        await localStorage.setItem('token', data.token);
+        // ✅ Store token (synchronously, no await)
+        localStorage.setItem('token', data.token);
         console.log('Token stored:', localStorage.getItem('token'));
 
-        // ✅ Decode token and navigate based on role
+        // ✅ Decode token and navigate
         const decoded = jwtDecode(data.token);
         console.log('Decoded token:', decoded);
 
         if (decoded.role === 'admin') {
           alert('Login successful');
+          console.log('Attempting to navigate to dashboard');
           navigate('/admin/dashboard', { replace: true });
         } else {
           alert('Access denied: Not an admin');

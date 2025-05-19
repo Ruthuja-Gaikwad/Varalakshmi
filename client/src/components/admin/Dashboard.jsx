@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
@@ -10,44 +10,48 @@ const Dashboard = () => {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState(null);
 
-  const fetchDashboardData = async (token) => {
-    try {
-      const [productRes, orderRes, contactRes] = await Promise.all([
-        fetch('http://localhost:5000/api/admin/products', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch('http://localhost:5000/api/admin/orders', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch('http://localhost:5000/api/contact', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
-      if (!productRes.ok || !orderRes.ok || !contactRes.ok) {
-        throw new Error('One or more requests failed');
-      }
-
-      const [productData, orderData, contactData] = await Promise.all([
-        productRes.json(),
-        orderRes.json(),
-        contactRes.json(),
-      ]);
-
-      setTotalProducts(productData.length || 0);
-      setPendingOrders(orderData.filter(order => order.status === 'pending').length || 0);
-      setContacts(Array.isArray(contactData) ? contactData : []);
-    } catch (error) {
-      console.error('Dashboard data fetch error:', error);
-      setError('Failed to load dashboard data. Please try again.');
-      localStorage.removeItem('token');
-      navigate('/admin/login');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchDashboardData = async (token) => {
+      try {
+        const [productRes, orderRes, contactRes] = await Promise.all([
+          fetch('http://localhost:5000/api/admin/products', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch('http://localhost:5000/api/admin/orders', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch('http://localhost:5000/api/contact', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        if (!productRes.ok || !orderRes.ok || !contactRes.ok) {
+          throw new Error('One or more requests failed');
+        }
+
+        const [productData, orderData, contactData] = await Promise.all([
+          productRes.json(),
+          orderRes.json(),
+          contactRes.json(),
+        ]);
+
+        setTotalProducts(Array.isArray(productData) ? productData.length : 0);
+        setPendingOrders(
+          Array.isArray(orderData) ? orderData.filter(order => order.status === 'pending').length : 0
+        );
+        setContacts(
+          contactData && Array.isArray(contactData.messages) ? contactData.messages : []
+        );
+      } catch (error) {
+        console.error('Dashboard data fetch error:', error);
+        setError('Failed to load dashboard data. Please try again.');
+        localStorage.removeItem('token');
+        navigate('/admin/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/admin/login');

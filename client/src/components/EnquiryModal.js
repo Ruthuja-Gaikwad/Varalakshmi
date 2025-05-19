@@ -22,54 +22,69 @@ export default function EnquiryModal({ isModalOpen, setIsModalOpen, enquiryProdu
   }, [setIsModalOpen]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!name || !email || !phone) {
-      setError('Name, email, and phone number are required.');
-      return;
-    }
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-    if (!phone.match(/^\+?\d{7,15}$/)) {
-      setError('Please enter a valid phone number.');
-      return;
-    }
-    if (isOrder && (!address || quantity < 1)) {
-      setError('Please enter a valid quantity and shipping address.');
-      return;
-    }
-    if (!isOrder && !message) {
-      setError('Please enter a message for your enquiry.');
-      return;
-    }
+  if (!name || !email || !phone) {
+    setError('Name, email, and phone number are required.');
+    return;
+  }
+  if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    setError('Please enter a valid email address.');
+    return;
+  }
+  if (!phone.match(/^\+?\d{7,15}$/)) {
+    setError('Please enter a valid phone number.');
+    return;
+  }
+  if (isOrder && (!address || quantity < 1)) {
+    setError('Please enter a valid quantity and shipping address.');
+    return;
+  }
+  if (!isOrder && !message) {
+    setError('Please enter a message for your enquiry.');
+    return;
+  }
 
-    const productId = enquiryProduct?._id || enquiryProduct?.id;
-    const payload = {
-      name,
-      email,
-      phone,
-      product: productId,
-      isOrder,
-      ...(isOrder ? { quantity, address } : { message }),
-    };
-
-    try {
-      setSubmitting(true);
-      await axios.post('/api/enquiries', payload);
-      alert('Submitted successfully!');
-      setName(''); setEmail(''); setPhone('');
-      setMessage(''); setQuantity(1); setAddress('');
-      setIsOrder(false); setError('');
-      setIsModalOpen(false);
-    } catch (err) {
-      console.error('Error submitting:', err.response || err.message);
-      setError('Failed to submit—please try again later.');
-    } finally {
-      setSubmitting(false);
-    }
+  const productId = enquiryProduct?._id || enquiryProduct?.id;
+  const payload = {
+    name,
+    email,
+    phone,
+    product: productId,
+    isOrder,
+    ...(isOrder ? { quantity, address } : { message }),
   };
+
+  try {
+    setSubmitting(true);
+    
+    // Get JWT token from localStorage (or however you store it)
+    const token = localStorage.getItem('token');
+
+    // Send the request with Authorization header
+    await axios.post('/api/enquiries', payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    alert('Submitted successfully!');
+    setName('');
+    setEmail('');
+    setPhone('');
+    setMessage('');
+    setQuantity(1);
+    setAddress('');
+    setIsOrder(false);
+    setError('');
+    setIsModalOpen(false);
+  } catch (err) {
+    console.error('Error submitting:', err.response?.data || err.message);
+    setError(err.response?.data?.message || 'Failed to submit—please try again later.');
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   if (!isModalOpen || !enquiryProduct) return null;
 

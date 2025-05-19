@@ -28,21 +28,31 @@ export default function CustomOrderPage() {
     data.append('description', formData.description);
     data.append('file', formData.file);
 
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('User not logged in. Please log in to submit an order.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: data,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit order');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit order');
       }
 
       const result = await response.json();
       alert('Your custom design request has been submitted!');
       console.log('Order saved:', result);
 
-      // Clear form
       setFormData({
         name: '',
         contact: '',
@@ -52,19 +62,19 @@ export default function CustomOrderPage() {
       });
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('There was a problem submitting your request.');
+      alert(error.message || 'There was a problem submitting your request.');
     }
   };
 
   return (
     <div
-      className="max-w-full lg:max-w-lg xl:max-w-xl mx-auto px-3 py-4 font-sans bg-cover bg-center bg-no-repeat rounded-xl shadow-lg"
+      className="max-w-full lg:max-w-lg xl:max-w-xl mx-auto px-3 py-4 font-sans bg-cover bg-center bg-no-repeat rounded-xl shadow-lg relative"
       style={{
         backgroundImage:
           "url('https://www.toptal.com/designers/subtlepatterns/patterns/sand.png')",
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-600 opacity-70"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-600 opacity-70 rounded-xl"></div>
 
       <h1 className="text-2xl font-bold text-yellow-700 mb-3 text-center relative z-10">
         Craft Your Custom Design
@@ -151,6 +161,13 @@ export default function CustomOrderPage() {
             onChange={handleChange}
             required
           />
+          {formData.file && (
+            <img
+              src={URL.createObjectURL(formData.file)}
+              alt="Preview"
+              className="w-32 h-32 object-cover mt-2 rounded-lg border"
+            />
+          )}
         </div>
 
         <div>

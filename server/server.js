@@ -27,9 +27,10 @@ const io = new Server(server, {
 // ✅ CORS Configuration
 const corsOptions = {
   origin: 'http://localhost:3000',
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
 app.use(cors(corsOptions));
 
 // ✅ Middleware

@@ -77,13 +77,7 @@ const Orders = () => {
             <table className="w-full table-auto border">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="p-2">Name</th>
-                  <th className="p-2">Contact</th>
-                  <th className="p-2">Product Type</th>
-                  <th className="p-2">Design Details</th>
-                  <th className="p-2">Design Image</th>
-                  <th className="p-2">Status</th> {/* New Status column */}
-                  <th className="p-2">Actions</th>
+                  <th className="p-2">Name</th><th className="p-2">Contact</th><th className="p-2">Product Type</th><th className="p-2">Design Details</th><th className="p-2">Design Image</th><th className="p-2">Status</th><th className="p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,7 +109,7 @@ const Orders = () => {
                       </td>
                       <td className="p-2">
                         <button
-                          onClick={() => deleteOrder(order._id)} // Delete the order
+                          onClick={() => deleteOrder(order._id)}
                           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
                         >
                           Delete
